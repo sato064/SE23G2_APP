@@ -96,7 +96,7 @@ if not sub:
         submitted = st.form_submit_button("記録")
 
     if submitted:
-        url = "https://api.github.com/repos/sato064/SE23G1_APP/issues/1/comments"
+        url = "https://api.github.com/repos/sato064/SE23G2_APP/issues/1/comments"
         headers = {"Accept": "application/vnd.github+json",
             "Authorization": GITHUB_TOKEN,
         "X-GitHub-Api-Version": "2022-11-28"
