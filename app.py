@@ -88,17 +88,21 @@ st.subheader('アドバイス文')
 st.info(short)
 st.subheader('振り返り')
 
-f = open('files/srs_1.txt', 'r')
-data = f.read()
-if data == "T":
-    sub = True
-else:
-    sub = False
-f.close()
+sub = False
+issue_url = "https://api.github.com/repos/sato064/SE23G2_APP/issues/1/comments"
+headers = {"Accept": "application/vnd.github+json",
+    "Authorization": GITHUB_TOKEN,
+    "X-GitHub-Api-Version": "2022-11-28"
+    }
+res = requests.get(issue_url, headers=headers).json()
+for data in res:
+    if data['body'].startswith('SRS1'):
+        sub = True
+        review = data['body'][5:]
 
 if not sub:
     with st.form("my_form", clear_on_submit=False):
-        review = st.text_area('今回のインスペクションをの振り返りを記入してください')
+        this_review = st.text_area('今回のインスペクションをの振り返りを記入してください')
         submitted = st.form_submit_button("記録")
 
     if submitted:
@@ -107,14 +111,11 @@ if not sub:
             "Authorization": GITHUB_TOKEN,
         "X-GitHub-Api-Version": "2022-11-28"
         }
-        data = {'body': 'SRS1\n' + review}
+        data = {'body': 'SRS1\n' + this_review}
         res = requests.post(url, headers=headers,data=json.dumps(data))
         print(res)
         st.success('保存しました')
-        st.text(review)
+        st.text(this_review)
 
 else:
-    f = open('files/srs_1_com.txt', 'r')
-    data = f.read()
-    st.text(data)
-    f.close()
+    st.text(review)
